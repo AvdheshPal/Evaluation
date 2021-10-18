@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News</title>
+    <style>
+        #show{
+            display: grid;
+            grid-template-columns: repeat(2, 45%);
+            gap: 2%;
+        }
+        .Photo {
+            width:100%; height: 100px;
+        }
+        .div{
+            border: 1px solid;
+            display: grid;
+            grid-template-columns: 30% 70%;
+            column-gap: 1%;
+        }
+        input{
+            width: 40%;
+            height: 40px;
+            margin-left: 25%;
+        }
+        button{
+            height: 40px;
+        }
+        h1{
+            text-align: center;
+        }
+        img{
+            width: 80px;
+            margin-left: 2px;
+        }
+    </style>
+</head>
+
+<body>
+   <h1> The Times of India</h1>
+    <header>
+        <nav>
+            <img src="https://www.pngitem.com/pimgs/m/192-1927144_news-icon-top-breaking-news-hd-png-download.png" alt="">
+            <input type="search" id="inp">
+            <button onclick="done()">Search</button>
+        </nav>
+    </header>
+    <h2 id="Letest">Letest News</h2>
+    <div id="show"></div>
+</body>
+
+</html>
+<script>
+    async function shownews() {
+
+        try {
+            let data = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=c2fe87ebce19486b99aec7ace2e105c1`)
+
+            let res = await data.json()
+
+            console.log(res.articles);
+
+            ok(res.articles)
+
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+    shownews()
+
+    let parent = document.getElementById("show")
+    function ok(e) {
+        e.forEach((e) => {
+            let div = document.createElement("div")
+            div.setAttribute("class", "div")
+            div.onclick=function(){
+                go(e)
+            }
+
+            let box1 = document.createElement("div")
+
+            let box2 = document.createElement("div")
+
+            let title = document.createElement("p")
+            title.innerText=e.title
+
+            let image = document.createElement("img")
+            image.src=e.urlToImage
+            image.setAttribute("class", "Photo")
+
+            let link = document.createElement("a")
+            link.href=e.url
+
+            link.textContent="Go to Official Page"
+
+            box1.append(image)
+
+            box2.append(title,link)
+
+            div.append(box1,box2)
+
+            parent.append(div)
+
+            
+        });
+    }
+
+    async function done() {
+
+        let letest = document.getElementById("Letest")
+        try{
+            letest.textContent="Searching Results"
+            let search = document.getElementById("inp").value
+            let ans = await fetch(`https://newsapi.org/v2/everything?q=${search}&from=2021-09-18&sortBy=publishedAt&apiKey=c2fe87ebce19486b99aec7ace2e105c1`)
+
+            let news = await ans.json()
+
+            console.log(news.articles[0].description);
+
+            showsearch(news.articles)
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    function showsearch(n){
+        parent.innerText=null
+        n.forEach((e)=>{
+            
+            
+            let div = document.createElement("div")
+            div.setAttribute("class", "div")
+            div.onclick=function(){
+                go(e)
+            }
+
+            let box1 = document.createElement("div")
+
+            let box2 = document.createElement("div")
+
+
+            let title = document.createElement("p")
+            title.innerText=e.title
+
+            let image = document.createElement("img")
+            image.src=e.urlToImage
+            image.setAttribute("class", "Photo")
+
+
+            let link = document.createElement("a")
+            link.href=e.url
+
+            link.textContent="Go to Official Page"
+
+            box1.append(image)
+
+            box2.append(title,link)
+
+            div.append(box1,box2)
+
+            parent.append(div)
+
+
+        });
+    }
+
+    function go(e) {
+        if(localStorage.getItem("news") === null){
+            localStorage.setItem("news", JSON.stringify([]))
+        }
+
+        localStorage.setItem("news", JSON.stringify(e))
+
+        window.location.href="news.html"
+    }
+</script>
