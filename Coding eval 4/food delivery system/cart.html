@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart page</title>
+</head>
+<body>
+    <h1>This Your cart</h1>
+    <h1 id="notic">Notification</h1>
+    <div id="parent"></div>
+    <button onclick="orederd()">Order</button>
+</body>
+</html>
+<script>
+    let parent = document.getElementById("parent")
+    let notice = document.getElementById("notic")
+
+    function show (){
+        let data = JSON.parse(localStorage.getItem("foodcart"))
+        console.log(data);
+
+        let p = document.createElement("h3")
+        p.innerText=data.strCategory
+
+        let image = document.createElement("img")
+        image.src=data.strCategoryThumb
+
+        let dis = document.createElement("p")
+        dis.innerText=data.strCategoryDescription
+
+        let div = document.createElement("div")
+        div.append(image,p,dis)
+        parent.append(div)
+    }
+    show()
+
+    function orederd(){
+        notice.innerText="Notification =   Your order is accepted"
+        parent.innerHTML = null
+        let timer1 =  setTimeout(() => {
+           notice.innerText="Notification =   Your order is being cooked "
+        }, 3000);
+        let timer2 = setTimeout(() => {
+            notice.innerText="Notification =   Your order is ready"
+        }, 8000);
+        let timer3 = setTimeout(() => {
+            notice.innerText="Notification =   Order out for delivery"
+        }, 10000);
+        let timer4 = setTimeout(() => {
+            notice.innerText="Notification =   Order delivered"
+            alert("thanks for visiting")
+        }, 12000);
+    }
+</script>

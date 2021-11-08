@@ -1,0 +1,17 @@
+#navbar{
+            display: flex;
+            height: 60px;
+            align-items: center;
+            background-color: gray;
+        }
+        #signin{
+            padding: 10px;
+            font-size: larger;
+            background-color: white;
+            margin: 0px 10px;
+        }
+        #singup{
+            padding: 10px;
+            font-size: larger;
+            background-color: white;
+        }

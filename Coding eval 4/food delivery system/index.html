@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="navbar">
+        <div id="signin">Sign in</div>
+        <div id="singup">Sign up</div>
+    </div>
+    <h1>Food App</h1>
+    
+    <a href="cart.html"><button>Go to Cart page</button></a>
+    <div id="parent"></div>
+</body>
+</html>
+<script>
+    var parent = document.getElementById("parent")
+
+    async function getitems () {
+        try{
+            let data = await fetch(`https://www.themealdb.com/api/json/v1/1/categories.php`)
+
+            let res = await data.json()
+
+            console.log(res.categories);
+            appends(res.categories)
+        }
+        catch(err){
+            alert(err)
+        }
+    }
+    getitems()
+
+    function appends(data){
+        data.forEach(({idCategory,strCategory,strCategoryDescription,strCategoryThumb})=>{
+            let div = document.createElement("div")
+
+            let p = document.createElement("h2")
+            p.innerText=strCategory
+
+            let image = document.createElement("img")
+            image.src=strCategoryThumb
+
+            let dis = document.createElement("p")
+            dis.innerText=strCategoryDescription
+
+            let btn = document.createElement("button")
+            btn.innerText="Add to Cart"
+            btn.onclick= ()=>{
+                alert("item added successfully")
+                addtocart({idCategory,strCategory,strCategoryDescription,strCategoryThumb})
+            }
+
+            div.append(image,p,dis,btn)
+
+            parent.append(div)
+        });
+
+        function addtocart({idCategory,strCategory,strCategoryDescription,strCategoryThumb}){
+            let data = {
+                idCategory,
+                strCategory,
+                strCategoryDescription,
+                strCategoryThumb
+            }
+            if(localStorage.getItem("foodcart") === null){
+                localStorage.setItem("foodcart",JSON.stringify([]))
+            }
+
+            localStorage.setItem("foodcart",JSON.stringify(data))
+        }
+    }
+</script>
